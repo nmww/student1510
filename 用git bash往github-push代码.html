@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://www.cnblogs.com/zichi/p/4703999.html -->
+<html lang="zh-cn"><script async="" src="./用git bash往github-push代码_files/gtm.js.下载" id="sf-gtm-GTM-W8WK57"></script><script type="text/javascript">(function g(a,b){window.SF_EXTENSIONS=window.SF_EXTENSIONS||{},window.SF_EXTENSIONS.DIMENSIONS=window.SF_EXTENSIONS.DIMENSIONS||{},window.SF_EXTENSIONS.IDS=window.SF_EXTENSIONS.IDS||[],window.SF_EXTENSIONS.DIMENSIONS[b.extension_id]=b,window.SF_EXTENSIONS.IDS.push(b.extension_id),window.google_tag_manager||window[a]||(window[a]=window[a]||[],window[a].push({"gtm.start":(new Date).getTime(),event:"gtm.js"}))}).apply(null,["sfDataLayer",{"0":"djaoeafihpfaakkpdobmhedohgnmhpbp","1":"2.4.0","2":2,"3":"newsfactory@extensionfactory.com","4":"News Factory","5":"新闻中心","6":"Chrome","7":"lkjojidbigcfoccebfhlmcieclnkhbap","8":"754a1b5c4f0b4582848402519d6d297f","9":"3","10":"ua/background-news","11":8,"12":"bbs.csdn.net,my.oschina.net","13":"https://clients2.google.com/service/update2/crx","15":"remote/loader/1|ua/background|stats/feature|newsfactory/tagging|feature/analytics/feature|gtm-content/feature|ua/background-news","manifest_version":2,"locale_name":"新闻中心","extension_id":"djaoeafihpfaakkpdobmhedohgnmhpbp","extension_version":"2.4.0","settings_id":"newsfactory@extensionfactory.com","extension_uid":"lkjojidbigcfoccebfhlmcieclnkhbap","affiliate_uid":"754a1b5c4f0b4582848402519d6d297f","feature_version":"3","default_name":"News Factory","browser_name":"Chrome","script_version":8,"feature_name":"ua/background-news","news_sites":"bbs.csdn.net,my.oschina.net","update_url":"https://clients2.google.com/service/update2/crx","features":"remote/loader/1|ua/background|stats/feature|newsfactory/tagging|feature/analytics/feature|gtm-content/feature|ua/background-news"}])</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>初学git：用git bash往github push代码 - 韩子迟 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./用git bash往github-push代码_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./用git bash往github-push代码_files/bundle-MTClean.css">
+<link type="text/css" rel="stylesheet" href="./用git bash往github-push代码_files/199121.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./用git bash往github-push代码_files/bundle-MTClean-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/zichi/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/zichi/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/zichi/wlwmanifest.xml">
+<script async="" src="./用git bash往github-push代码_files/analytics.js.下载"></script><script src="./用git bash往github-push代码_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'zichi', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./用git bash往github-push代码_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="shortcut icon" href="http://hanzichi.github.io/favicon.ico"></head>
+<body>
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<a class="git-link" href="https://github.com/hanzichi"></a>
+<!--PageBeginHtml Block End-->
+
+<div id="top">
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/zichi/">simplify the life</a></h1>
+<p id="tagline"></p>
+</div>
+<div id="main">
+	
+<div id="post_detail">
+	<div class="post">
+		<h2>
+			<a id="cb_post_title_url" href="http://www.cnblogs.com/zichi/p/4703999.html">初学git：用git bash往github push代码</a>
+		</h2>
+		<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown"><p>对于我来说，最开始使用github主要是为了使用它的<a href="https://pages.github.com/">pages</a>功能展示demo。其实这些都是用<a href="https://windows.github.com/">Github for Windows</a> push上去的，图形化界面的客户端使用确实简单，但是逼格不够，好吧其实是各种原因下不了客户端，正好给我一个探索terminal方式的机会。</p>
+<h3 id="github账号注册-msysgit的安装">1、github账号注册 &amp; msysgit的安装</h3>
+<hr>
+<p>言归正传，简单介绍下怎样利用git bash操作远端的github代码。首先得有git和github的基本概念，git是版本控制工具，而github相当于一个“免费”的服务器了（一般公司会搭建自己的git服务器）。然后可以注册个<a href="https://github.com/">github</a>的账号，很简单，分分钟注册完。之后，得在本地安装<a href="https://git-for-windows.github.io/">msysgit</a>，安装完后，你会发现多了git bash和git gui，顾名思义一个是terminal方式一个是图形用户界面的方式。</p>
+<h3 id="设置用户信息">2、设置用户信息</h3>
+<hr>
+<p>git要求使用者必须提供自己的身份标识，为此我们需要在git bash中执行以下命令（当然不设置也行，每次提交都是unknown... macOS 貌似会提交系统用户名）：</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar0" data-clipboard-action="copy">复制代码</a><code class="hljs fsharp" id="bar0">$ git config --<span class="hljs-keyword">global</span> user.name <span class="hljs-string">"hanzichi"</span> <span class="hljs-comment">//给自己起个用户名</span>
+$ git config --<span class="hljs-keyword">global</span> user.email  <span class="hljs-string">"abc@gmail.com"</span> <span class="hljs-comment">//填写自己的邮箱</span></code></pre>
+<h3 id="获取密钥">3、<a href="https://help.github.com/articles/generating-ssh-keys/">获取密钥</a></h3>
+<hr>
+<p>2017.02.15: 以下步骤可能会过时，或者仅适用于 windows 系统，可参考 <a href="https://help.github.com/articles/connecting-to-github-with-ssh/" class="uri">https://help.github.com/articles/connecting-to-github-with-ssh/</a> 获取更详细步骤</p>
+<p>GitHub选择的默认通信方式是SSH(对SSH感兴趣的可以参考阮老师的文章<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a> <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH原理与运用（二）：远程操作与端口转发</a>)，如果没有配置SSH key就只能clone代码不能push上去（只读），所以要先在Git里面生成SHH Key。如果在当前用户的第一级文件夹下有<code>.ssh</code>文件夹，说明以前可能使用过git，把该文件夹删除（或者先备份再删除，防止意外）。</p>
+<p>获得密钥：</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar1" data-clipboard-action="copy">复制代码</a><code class="hljs cpp" id="bar1">ssh-keygen -t rsa -C <span class="hljs-string">"abc@gmail.com"</span> <span class="hljs-comment">//填写email地址，然后一直“回车”ok</span></code></pre>
+<p>打开本地..\.ssh\id_rsa.pub文件。此文件里面内容为刚才生成的密钥。然后把该密钥复制到github的<a href="https://github.com/settings/ssh">setting/ssh</a>中，点击打开页面的add SSH key按钮，title任意，把key值复制进去。</p>
+<p>经过上述配置，你的Git应该可以通过SSH连接GitHub服务器了，可以测试一把（配置完SSH key后，就表示本地能操作该用户下的库，能提交代码了）：</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar2" data-clipboard-action="copy">复制代码</a><code class="hljs nginx" id="bar2"><span class="hljs-attribute">ssh</span> -T git<span class="hljs-variable">@github</span>.com</code></pre>
+<p>提示像我这样：Hi hanzichi! You've successfully authenticated, but GitHub does not provide shell access. 那就说明连接成功了。</p>
+<h3 id="远程操作">4、远程操作</h3>
+<hr>
+<p>确认本地和github的服务器可以通信后，就可以拉代码、push代码了。</p>
+<p>可以使用现有的项目或者fork的项目，这里为了测试，我新建了个<a href="https://github.com/hanzichi/helloworld">helloworld项目</a>，然后打开git bash，进入自己要克隆文件的目录，用git clone命令把该项目克隆到本地。</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar3" data-clipboard-action="copy">复制代码</a><code class="hljs groovy" id="bar3">git clone git<span class="hljs-meta">@github</span>.<span class="hljs-string">com:</span>hanzichi/helloworld.git</code></pre>
+<p><strong>推荐用SSH的地址，而不是HTTPS，这样就不用每次输用户名密码了。</strong></p>
+<p>克隆完后，打开helloworld文件夹，里面有个隐藏的<code>.git</code>文件夹，还有个README的md文件，这是在创建项目的时候设置添加的。接着就可以往里面添加文件了。比如我在helloworld文件夹下写了一个index.html文件和一个index.js文件，我要把它们添加到远程项目库中。</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar4" data-clipboard-action="copy">复制代码</a><code class="hljs sql" id="bar4">git add . // 要add的文件，. 表示添加所有
+git <span class="hljs-keyword">commit</span> -<span class="hljs-keyword">m</span> <span class="hljs-string">'add files'</span> // 提交更新
+git push origin <span class="hljs-keyword">master</span>  // push到远端<span class="hljs-keyword">master</span>上</code></pre>
+<p>这样操作后文件就提交到远端去了！ 注意只有最后一步和github有关！</p>
+<h3 id="notice">notice</h3>
+<hr>
+<p>这里再提点别的，还是像以上操作在github创建了一个helloworld项目，可以不先克隆，而在本地创建一个helloworld文件夹，右击文件夹用<code>git init</code>命令初始化git环境，然后关联 GitHub 中的项目（需要先创建）：</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar5" data-clipboard-action="copy">复制代码</a><code class="hljs groovy" id="bar5">git remote add origin git<span class="hljs-meta">@github</span>.<span class="hljs-string">com:</span>hanzichi/helloworld.git</code></pre>
+<p>然后就是普通的 add、commit 和 push 操作了（第一次可能需要 git push -u origin master）</p>
+<p>如果出现错误，提示：fatal: remote origin already exists 则可直接push</p>
+<p>如果在执行 git push origin master 时报错：error:failed to push som refs to.......</p>
+<p>则可先执行：</p>
+<pre style="position: relative;"><a href="javascript:;" class="btn" data-clipboard-target="#bar6" data-clipboard-action="copy">复制代码</a><code class="hljs nginx" id="bar6"> <span class="hljs-attribute">git</span> pull origin master</code></pre>
+<p>先把远程服务器github上面的文件拉先来，再push 上去。</p>
+<p><strong>参考</strong></p>
+<ol>
+<li><a href="http://www.cnblogs.com/zichi/p/%E5%85%B3%E4%BA%8E%E5%88%9D%E5%AD%A6%E8%80%85%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github%E7%9A%84%E6%96%B9%E6%B3%95" class="uri">关于初学者上传文件到github的方法</a></li>
+<li><a href="http://www.cnblogs.com/fnng/archive/2011/08/25/2153807.html">git/github学习笔记</a></li>
+<li><a href="http://wuyuans.com/2012/05/github-simple-tutorial/">github简单使用教程</a></li>
+<li><a href="http://www.worldhello.net/gotgithub/03-project-hosting/030-repo-authz.html">公钥认证管理</a></li>
+</ol>
+<iframe id="tmp_downloadhelper_iframe" style="display: none;" src="./用git bash往github-push代码_files/saved_resource.html"></iframe></div><div>
+    <div id="reward" style="display:none;">
+      <h1 class="title">赏杯咖啡 😄</h1>
+      <div class="detail">
+        <div class="qrcode">
+          <img width="215" src="./用git bash往github-push代码_files/006tKfTcgy1fj3vibepwgj30em0eq0v0.jpg">
+        </div>
+        <p>支付宝</p>
+      </div><div class="detail">
+        <div class="qrcode">
+          <img width="215" src="./用git bash往github-push代码_files/006tKfTcgy1fj3vimho4ij30i30ia3zi.jpg">
+        </div>
+        <p>微 信</p>
+      </div>
+    </div>
+
+    <div class="reward-area" style="display:none">
+      <h1>原创不易，如果您觉得我的文章对您有帮助，不妨小额赞助～😄</h1>
+      👉<span class="subtitle">有任何技术或者情感方面的问题，不妨在下面留言或者发邮件给我 😁</span>
+      <a href="http://www.cnblogs.com/zichi/p/4703999.html#reward" rel="modal:open">
+        <div class="reward-btn">
+          打赏支持
+        </div>
+      </a>
+    </div>
+  </div><div id="MySignature"><div>可能是史上最详细的 underscore 源码剖析：<a href="https://github.com/hanzichi/underscore-analysis">https://github.com/hanzichi/underscore-analysis</a><br>程序员都应该学点算法：<a href="https://github.com/hanzichi/leetcode">https://github.com/hanzichi/leetcode</a><br>了解博主韩子迟：<a href="http://www.cnblogs.com/zichi/p/about.html">http://www.cnblogs.com/zichi/p/about.html</a><br> GitHub：<a href="https://github.com/hanzichi">https://github.com/hanzichi</a>  Follow 楼主给楼主更多写作的动力~</div></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/zichi/category/720319.html" target="_blank">Git</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4703999,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;cd02e9fc-9343-e411-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./用git bash往github-push代码_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./用git bash往github-push代码_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/zichi/" target="_blank"><img src="./用git bash往github-push代码_files/20170702143944.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/zichi/">韩子迟</a><br>
+            <a href="http://home.cnblogs.com/u/zichi/followees">关注 - 56</a><br>
+            <a href="http://home.cnblogs.com/u/zichi/followers">粉丝 - 718</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor">荣誉：<a href="http://www.cnblogs.com/expert/" target="_blank">推荐博客</a></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;cd02e9fc-9343-e411-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4703999,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(4703999,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/zichi/p/4694400.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/zichi/p/4694400.html" title="发布于2015-08-01 17:45">JSON拾遗</a><br><a href="http://www.cnblogs.com/zichi/p/4704824.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/zichi/p/4704824.html" title="发布于2015-08-05 16:24">如何配置多个ssh key</a><br></div>
+</div>
+
+
+		<p class="postfoot">
+			posted on <span id="post-date">2015-08-05 10:23</span> <a href="http://www.cnblogs.com/zichi/">韩子迟</a> 阅读(<span id="post_view_count">16919</span>) 评论(<span id="post_comment_count">6</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4703999" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/zichi/p/4703999.html#" onclick="AddToWz(4703999);return false;">收藏</a>
+		</p>
+	</div>
+	<script src="./用git bash往github-push代码_files/highlight.min.js.下载"></script><script>markdown_highlight();</script><script type="text/javascript">var allowComments=true,cb_blogId=199121,cb_entryId=4703999,cb_blogApp=currentBlogApp,cb_blogUserGuid='cd02e9fc-9343-e411-b908-9dcfd8948a71',cb_entryCreatedDate='2015/8/5 10:23:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+
+<div id="comments">
+<h3>Feedback</h3>
+	
+	
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3241689" class="layer">#1楼</a><a name="3241689" id="comment_anchor_3241689"></a>
+					<span>
+						 <span class="comment_date">2015-08-05 14:44</span>
+					</span>
+				<a id="a_comment_author_3241689" href="http://www.cnblogs.com/chucklu/" target="_blank">ChuckLu</a> <a href="http://msg.cnblogs.com/send/ChuckLu" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3241689" class="blog_comment_body">推荐使用tortoisegit和git结合使用</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3241689,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3241689,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3241689_avatar" style="display:none;">http://pic.cnblogs.com/face/470550/20140721144551.png</span>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3241755" class="layer">#2楼</a><a name="3241755" id="comment_anchor_3241755"></a>[<span class="louzhu">楼主</span>]
+					<span>
+						 <span class="comment_date">2015-08-05 16:01</span>
+					</span>
+				<a id="a_comment_author_3241755" href="http://www.cnblogs.com/zichi/" target="_blank">韩子迟</a> <a href="http://msg.cnblogs.com/send/%E9%9F%A9%E5%AD%90%E8%BF%9F" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3241755" class="blog_comment_body"><a href="http://www.cnblogs.com/zichi/p/4703999.html#3241689" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3241689);">@</a>
+ChuckLu<br>谢谢建议~ 等熟悉了一些简单命令之后去试试</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3241755,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3241755,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3241755_avatar" style="display:none;">http://pic.cnblogs.com/face/675542/20170702143944.png</span>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3857904" class="layer">#3楼</a><a name="3857904" id="comment_anchor_3857904"></a>
+					<span>
+						 <span class="comment_date">2017-12-04 23:38</span>
+					</span>
+				<a id="a_comment_author_3857904" href="http://home.cnblogs.com/u/1293246/" target="_blank">sakura-秋秋秋</a> <a href="http://msg.cnblogs.com/send/sakura-%E7%A7%8B%E7%A7%8B%E7%A7%8B" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3857904" class="blog_comment_body">请问。。。为啥我下载不了那个软件msysgit啊。。。一直显示我下载失败。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3857904,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3857904,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3858203" class="layer">#4楼</a><a name="3858203" id="comment_anchor_3858203"></a>[<span class="louzhu">楼主</span>]
+					<span>
+						 <span class="comment_date">2017-12-05 13:09</span>
+					</span>
+				<a id="a_comment_author_3858203" href="http://www.cnblogs.com/zichi/" target="_blank">韩子迟</a> <a href="http://msg.cnblogs.com/send/%E9%9F%A9%E5%AD%90%E8%BF%9F" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3858203" class="blog_comment_body"><a href="http://www.cnblogs.com/zichi/p/4703999.html#3857904" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3857904);">@</a>
+sakura-秋秋秋 <br><br>难道要科学上网？已经告别 windows 了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3858203,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3858203,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3858203_avatar" style="display:none;">http://pic.cnblogs.com/face/675542/20170702143944.png</span>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3887503" class="layer">#5楼</a><a name="3887503" id="comment_anchor_3887503"></a>
+					<span>
+						 <span class="comment_date">2018-01-12 11:23</span>
+					</span>
+				<a id="a_comment_author_3887503" href="http://home.cnblogs.com/u/920096/" target="_blank">xiaoying2013</a> <a href="http://msg.cnblogs.com/send/xiaoying2013" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3887503" class="blog_comment_body">谢谢分享，第一次尝试，按照操作一步步下来，居然真的在github上成功上传了本地文件，虽然中途还去搜索了其它教程补补课外知识，但是这个教程真心好用，感激！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3887503,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3887503,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="http://www.cnblogs.com/zichi/p/4703999.html#3887508" class="layer">#6楼</a><a name="3887508" id="comment_anchor_3887508"></a>[<span class="louzhu">楼主</span>]<span id="comment-maxId" style="display:none;">3887508</span><span id="comment-maxDate" style="display:none;">2018/1/12 11:25:47</span>
+					<span>
+						 <span class="comment_date">2018-01-12 11:25</span>
+					</span>
+				<a id="a_comment_author_3887508" href="http://www.cnblogs.com/zichi/" target="_blank">韩子迟</a> <a href="http://msg.cnblogs.com/send/%E9%9F%A9%E5%AD%90%E8%BF%9F" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3887508" class="blog_comment_body"><a href="http://www.cnblogs.com/zichi/p/4703999.html#3887503" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3887503);">@</a>
+xiaoying2013<br>你会越来越娴熟的～</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3887508,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3887508,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3887508_avatar" style="display:none;">http://pic.cnblogs.com/face/675542/20170702143944.png</span>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+</div><div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/zichi/p/4703999.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/zichi/p/4703999.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/594288/" target="_blank">甲骨文在GitHub开源Unbreakable Enterprise Kernel</a><br> ·  <a href="https://news.cnblogs.com/n/594290/" target="_blank">微软账号页面测试启用Fluent Design新界面</a><br> ·  <a href="https://news.cnblogs.com/n/594286/" target="_blank">WebAssembly再添一员猛将：将支持使用Go语言</a><br> ·  <a href="https://news.cnblogs.com/n/594285/" target="_blank">贾跃亭妻子也被列入老赖名单：中植系旗下中泰创展追讨14亿</a><br> ·  <a href="https://news.cnblogs.com/n/594283/" target="_blank">“皮肤细胞造人”前景诱人 英媒：伦理问题值得重视</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/575255/" target="_blank">写给自学者的入门指南</a><br> ·  <a href="http://kb.cnblogs.com/page/578690/" target="_blank">和程序员谈恋爱</a><br> ·  <a href="http://kb.cnblogs.com/page/585734/" target="_blank">学会学习</a><br> ·  <a href="http://kb.cnblogs.com/page/588938/" target="_blank">优秀技术人的管理陷阱</a><br> ·  <a href="http://kb.cnblogs.com/page/590141/" target="_blank">作为一个程序员，数学对你到底有多重要</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+</div>
+<div id="leftmenu">
+
+	
+<h3>导航</h3>
+<ul>
+			<li><a id="blog_nav_sitehome" href="http://www.cnblogs.com/">博客园</a></li>
+			<li><a id="blog_nav_myhome" href="http://www.cnblogs.com/zichi/">首页</a></li>
+			<li><a id="blog_nav_contact" accesskey="9" rel="nofollow" href="https://msg.cnblogs.com/send/%E9%9F%A9%E5%AD%90%E8%BF%9F">联系</a></li>
+			<li><a id="blog_nav_rss" href="http://www.cnblogs.com/zichi/rss">订阅</a> <a id="blog_nav_rss_image" href="http://www.cnblogs.com/zichi/rss"><img src="./用git bash往github-push代码_files/xml.gif" alt="订阅"></a>
+			</li><li><a id="blog_nav_admin" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul><div><h3>个人信息</h3><ul>  <li><a target="_blank" href="https://github.com/hanzichi"><img class="github-pic" src="./用git bash往github-push代码_files/github.gif"></a></li>  <li>Weibo：<a target="_blank" href="http://weibo.com/hanzichi/">@韩子迟</a></li>  <li>Email：hanzichi#outlook.com</li>  <li>我的简介：<a target="_blank" href="http://www.cnblogs.com/zichi/p/about.html">了解博主『 韩子迟 』</a></li></ul><h3>友情链接</h3><ul>  <li><a target="_blank" href="http://www.cnblogs.com/coco1s/">ChokCoco</a></li>  <li><a target="_blank" href="http://www.cnblogs.com/vajoy/">vajoy</a></li>  <li><a target="_blank" href="http://www.cnblogs.com/dojo-lzz/">木神</a></li></ul></div>
+	<div id="blog_stats">
+<h3>统计信息</h3>
+	<ul>
+		<li>随笔 - 253
+		</li><li>文章 - 0
+		</li><li>评论 - 923
+		</li><li>Trackbacks - 0
+	</li>
+</ul></div>
+	
+<h3>News</h3>
+	<ul>
+	  <li><div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/zichi/">韩子迟</a><br>园龄：<a href="https://home.cnblogs.com/u/zichi/" title="入园时间：2014-09-24">3年6个月</a><br>荣誉：<a href="https://www.cnblogs.com/expert/">推荐博客</a><br>粉丝：<a href="https://home.cnblogs.com/u/zichi/followers/">718</a><br>关注：<a href="https://home.cnblogs.com/u/zichi/followees/">56</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;cd02e9fc-9343-e411-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('cd02e9fc-9343-e411-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script></li>
+	</ul>
+
+	<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+		<h3>随笔分类<span style="font-size:11px;font-weight:normal">(253)</span></h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/zichi/category/732094.html">Algorithm(5)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/zichi/category/742257.html">Apache(7)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/zichi/category/707075.html">Async(3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/zichi/category/773699.html">Best Practices(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/zichi/category/732474.html">Bit Manipulation(9)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/zichi/category/718147.html">Browser(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/zichi/category/773517.html">Browser Compatibility(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/zichi/category/627224.html">Canvas(10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/zichi/category/1104142.html">Chrome Dev(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/zichi/category/707013.html">Cross domain(5)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/zichi/category/662331.html">CSS3(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/zichi/category/733563.html">Data Structure(3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/zichi/category/739320.html">Debug(10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/zichi/category/743027.html">Demo(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/zichi/category/936736.html">Docker</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/zichi/category/731759.html">DOM(8)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/zichi/category/1118780.html">Electron</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_17" href="http://www.cnblogs.com/zichi/category/867468.html">ES6(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_18" href="http://www.cnblogs.com/zichi/category/789289.html">Firefox(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_19" href="http://www.cnblogs.com/zichi/category/720319.html">Git(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_20" href="http://www.cnblogs.com/zichi/category/932274.html">Gulp(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_21" href="http://www.cnblogs.com/zichi/category/712374.html">High Performance JavaScript(6)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_22" href="http://www.cnblogs.com/zichi/category/622199.html">HTML &amp; CSS(3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_23" href="http://www.cnblogs.com/zichi/category/745484.html">HTML5(8)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_24" href="http://www.cnblogs.com/zichi/category/742256.html">HTTP(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_25" href="http://www.cnblogs.com/zichi/category/778997.html">IE(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_26" href="http://www.cnblogs.com/zichi/category/739319.html">Interview(7)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_27" href="http://www.cnblogs.com/zichi/category/771168.html">iOS  Compatibility(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_28" href="http://www.cnblogs.com/zichi/category/700555.html">Java(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_29" href="http://www.cnblogs.com/zichi/category/617797.html">JavaScript(16)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_30" href="http://www.cnblogs.com/zichi/category/726559.html">JavaScript Manual(10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_31" href="http://www.cnblogs.com/zichi/category/721233.html">leetcode(15)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_32" href="http://www.cnblogs.com/zichi/category/773760.html">life(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_33" href="http://www.cnblogs.com/zichi/category/936372.html">Mac(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_34" href="http://www.cnblogs.com/zichi/category/739339.html">Math(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_35" href="http://www.cnblogs.com/zichi/category/1110020.html">Mobile</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_36" href="http://www.cnblogs.com/zichi/category/930055.html">Nginx(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_37" href="http://www.cnblogs.com/zichi/category/708864.html">Node.js(11)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_38" href="http://www.cnblogs.com/zichi/category/883087.html">OOP(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_39" href="http://www.cnblogs.com/zichi/category/776163.html">Personals(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_40" href="http://www.cnblogs.com/zichi/category/619942.html">PHP(7)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_41" href="http://www.cnblogs.com/zichi/category/797174.html">PHP Manual(3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_42" href="http://www.cnblogs.com/zichi/category/717848.html">Professional JavaScript(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_43" href="http://www.cnblogs.com/zichi/category/837627.html">Python(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_44" href="http://www.cnblogs.com/zichi/category/955252.html">React</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_45" href="http://www.cnblogs.com/zichi/category/822319.html">Redis(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_46" href="http://www.cnblogs.com/zichi/category/739313.html">RegExp(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_47" href="http://www.cnblogs.com/zichi/category/1005475.html">Requirejs(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_48" href="http://www.cnblogs.com/zichi/category/933053.html">Sass(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_49" href="http://www.cnblogs.com/zichi/category/1152700.html">Secure</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_50" href="http://www.cnblogs.com/zichi/category/1088146.html">SegmentFault(5)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_51" href="http://www.cnblogs.com/zichi/category/743401.html">Sublime(3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_52" href="http://www.cnblogs.com/zichi/category/707012.html">Thinking(10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_53" href="http://www.cnblogs.com/zichi/category/702975.html">Tool(6)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_54" href="http://www.cnblogs.com/zichi/category/707097.html">Translation(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_55" href="http://www.cnblogs.com/zichi/category/752823.html">Trick(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_56" href="http://www.cnblogs.com/zichi/category/813357.html">underscore.js(19)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_57" href="http://www.cnblogs.com/zichi/category/930056.html">Vue</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_58" href="http://www.cnblogs.com/zichi/category/1074394.html">webpack(4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_59" href="http://www.cnblogs.com/zichi/category/725364.html">XML(1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_60" href="http://www.cnblogs.com/zichi/category/659270.html">其他(2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_61" href="http://www.cnblogs.com/zichi/category/935158.html">前端工程化</a>  </li>
+			
+				<li><a id="CatList_LinkList_0_Link_62" href="http://www.cnblogs.com/zichi/category/625231.html">自己备份(1)</a>  </li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案<span style="font-size:11px;font-weight:normal">(253)</span></h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/zichi/archive/2018/02.html">2018年2月 (1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/zichi/archive/2018/01.html">2018年1月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/zichi/archive/2017/12.html">2017年12月 (3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/zichi/archive/2017/11.html">2017年11月 (3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/zichi/archive/2017/10.html">2017年10月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/zichi/archive/2017/09.html">2017年9月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/zichi/archive/2017/07.html">2017年7月 (2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/zichi/archive/2017/05.html">2017年5月 (1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/zichi/archive/2017/03.html">2017年3月 (2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/zichi/archive/2017/02.html">2017年2月 (1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_10" href="http://www.cnblogs.com/zichi/archive/2017/01.html">2017年1月 (7)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/zichi/archive/2016/12.html">2016年12月 (1)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_12" href="http://www.cnblogs.com/zichi/archive/2016/11.html">2016年11月 (5)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_13" href="http://www.cnblogs.com/zichi/archive/2016/10.html">2016年10月 (3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_14" href="http://www.cnblogs.com/zichi/archive/2016/09.html">2016年9月 (3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/zichi/archive/2016/08.html">2016年8月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/zichi/archive/2016/07.html">2016年7月 (6)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_17" href="http://www.cnblogs.com/zichi/archive/2016/06.html">2016年6月 (8)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_18" href="http://www.cnblogs.com/zichi/archive/2016/05.html">2016年5月 (8)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/zichi/archive/2016/04.html">2016年4月 (8)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_20" href="http://www.cnblogs.com/zichi/archive/2016/03.html">2016年3月 (11)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/zichi/archive/2016/02.html">2016年2月 (9)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_22" href="http://www.cnblogs.com/zichi/archive/2016/01.html">2016年1月 (18)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_23" href="http://www.cnblogs.com/zichi/archive/2015/12.html">2015年12月 (20)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_24" href="http://www.cnblogs.com/zichi/archive/2015/11.html">2015年11月 (14)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_25" href="http://www.cnblogs.com/zichi/archive/2015/10.html">2015年10月 (10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_26" href="http://www.cnblogs.com/zichi/archive/2015/09.html">2015年9月 (24)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_27" href="http://www.cnblogs.com/zichi/archive/2015/08.html">2015年8月 (13)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_28" href="http://www.cnblogs.com/zichi/archive/2015/07.html">2015年7月 (14)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_29" href="http://www.cnblogs.com/zichi/archive/2015/06.html">2015年6月 (10)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_30" href="http://www.cnblogs.com/zichi/archive/2015/04.html">2015年4月 (3)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_31" href="http://www.cnblogs.com/zichi/archive/2015/03.html">2015年3月 (13)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_32" href="http://www.cnblogs.com/zichi/archive/2015/02.html">2015年2月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_33" href="http://www.cnblogs.com/zichi/archive/2015/01.html">2015年1月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_34" href="http://www.cnblogs.com/zichi/archive/2014/12.html">2014年12月 (2)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_35" href="http://www.cnblogs.com/zichi/archive/2014/11.html">2014年11月 (4)</a>  </li>
+			
+				<li><a id="CatList_LinkList_1_Link_36" href="http://www.cnblogs.com/zichi/archive/2014/10.html">2014年10月 (2)</a>  </li>
+			
+				</ul>
+			
+	</div><div id="sidebar_scorerank" class="sidebar-block">
+<h3>积分与排名</h3>
+<ul>
+	<li>
+		积分 -
+		350225
+	</li><li>
+		排名 -
+		476
+	</li>
+</ul>
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/zichi/p/4807072.html#3925847">1. Re:【前端也要学点数据结构】神奇的树状数组的三大应用</a></li>
+        <li class="recent_comment_body">如果m(1&lt;=m&lt;=n)被染色，那么m的右边肯定都被染色了。求出被染色的次数，然后乘上区间宽度，就是整段的和了。应该是左边吧</li>
+        <li class="recent_comment_author">--linkkkk</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/zichi/p/4807072.html#3925753">2. Re:【前端也要学点数据结构】神奇的树状数组的三大应用</a></li>
+        <li class="recent_comment_body">大脑在燃烧。。总结得很好。</li>
+        <li class="recent_comment_author">--linkkkk</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/zichi/p/4788229.html#3920733">3. Re:markdown在博客园的使用</a></li>
+        <li class="recent_comment_body">@hapjin不行啊，还是要复制粘贴出来才能发表，至多自己写个脚本发表，博客园并没有这样的 md 客户端...</li>
+        <li class="recent_comment_author">--韩子迟</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/zichi/p/html5-file-api.html">1. HTML5 File API — 让前端操作文件变的可能(28842)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4992885.html">2. 如何用 fiddler 捕获 https 请求(18642)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4620656.html">3. 利用window.name+iframe跨域获取数据详解(18218)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4703999.html">4. 初学git：用git bash往github push代码(16919)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4869789.html">5. 一步一步教你实现仿百度搜索框下拉效果(11561)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/zichi/p/6032582.html">1. 早产的2016年终总结(53)</a></li><li><a href="http://www.cnblogs.com/zichi/p/5115754.html">2. 【数据分析】6 点发的文章在博客园阅读量最高？(41)</a></li><li><a href="http://www.cnblogs.com/zichi/p/5252629.html">3. 大流量网站性能优化：一步一步打造一个适合自己的BigRender插件(28)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4359786.html">4. 这10道javascript笔试题你都会么(22)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4788229.html">5. markdown在博客园的使用(21)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/zichi/p/5252629.html">1. 大流量网站性能优化：一步一步打造一个适合自己的BigRender插件(45)</a></li><li><a href="http://www.cnblogs.com/zichi/p/4954328.html">2. Web Worker 是什么鬼？(27)</a></li><li><a href="http://www.cnblogs.com/zichi/p/6032582.html">3. 早产的2016年终总结(25)</a></li><li><a href="http://www.cnblogs.com/zichi/p/5705196.html">4. 成为高效程序员应该掌握的搜索技巧(23)</a></li><li><a href="http://www.cnblogs.com/zichi/p/5115754.html">5. 【数据分析】6 点发的文章在博客园阅读量最高？(21)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+
+</div>
+
+<p id="footer">
+	Powered by: 
+	<br>
+	
+	<a id="Footer1_Hyperlink3" name="Hyperlink1" href="http://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br>
+	Copyright © 韩子迟
+</p>
+<!--PageEndHtml Block Begin-->
+<script src="./用git bash往github-push代码_files/clipboard.min.js.下载"></script>
+<script src="./用git bash往github-push代码_files/jquery.modal.min.js.下载"></script>
+<link href="./用git bash往github-push代码_files/jquery.modal.min.css" rel="stylesheet">
+<script>
+// 插入 favicon.ico
+// 直接写在页首 HTML 中不起效
+var l = document.createElement('link');
+l.rel = "shortcut icon";
+l.href = "http://hanzichi.github.io/favicon.ico";
+document.getElementsByTagName("head")[0].appendChild(l);
+
+// 复制代码
+var code = $('#cnblogs_post_body pre code');
+var len = code.size();
+
+for (var i = 0; i < len; i++) {
+  var item = code.eq(i);
+  // 复制的元素
+  item.attr('id', 'bar' + i);
+  item.parent().css('position', 'relative');
+  $("<a/>", {
+    text: '复制代码',
+    href: 'javascript:;',
+    class: 'btn',
+    'data-clipboard-target': '#bar' + i,
+    'data-clipboard-action': 'copy'
+  }).insertBefore(item);
+}
+
+new Clipboard('.btn');
+
+// 每篇文章尾部统一内容
+if (document.getElementById('MySignature')) {
+  document.getElementById('MySignature').innerHTML = "<div>可能是史上最详细的 underscore 源码剖析：<a href='https://github.com/hanzichi/underscore-analysis'>https://github.com/hanzichi/underscore-analysis</a><br/>程序员都应该学点算法：<a href='https://github.com/hanzichi/leetcode'>https://github.com/hanzichi/leetcode</a><br/>了解博主韩子迟：<a href='http://www.cnblogs.com/zichi/p/about.html'>http://www.cnblogs.com/zichi/p/about.html</a><br/> GitHub：<a href='https://github.com/hanzichi'>https://github.com/hanzichi</a>  Follow 楼主给楼主更多写作的动力~</div>";
+}
+
+// 增加赞赏
+let alipayUrl = 'https://ws4.sinaimg.cn/large/006tKfTcgy1fj3vibepwgj30em0eq0v0.jpg'
+let wxUrl = 'https://ws3.sinaimg.cn/large/006tKfTcgy1fj3vimho4ij30i30ia3zi.jpg'
+let $reward = $(`
+  <div>
+    <div id="reward" style="display:none;">
+      <h1 class="title">赏杯咖啡 😄</h1>
+      <div class="detail">
+        <div class="qrcode">
+          <img width=215 src=${alipayUrl} />
+        </div>
+        <p>支付宝</p>
+      </div><div class="detail">
+        <div class="qrcode">
+          <img width=215 src=${wxUrl} />
+        </div>
+        <p>微 信</p>
+      </div>
+    </div>
+
+    <div class="reward-area" style="display:none">
+      <h1>原创不易，如果您觉得我的文章对您有帮助，不妨小额赞助～😄</h1>
+      👉<span class="subtitle">有任何技术或者情感方面的问题，不妨在下面留言或者发邮件给我 😁</span>
+      <a href="#reward" rel="modal:open">
+        <div class="reward-btn">
+          打赏支持
+        </div>
+      </a>
+    </div>
+  </div>
+  `)
+$('#MySignature').before($reward)
+
+// 右侧导航 个人信息&友链
+var strVar = "";
+strVar += "<h3>个人信息<\/h3>";
+strVar += "<ul>";
+strVar += "  <li><a target=\"_blank\" href=\"https://github.com/hanzichi\"><img class=\"github-pic\" src=\"https://files.cnblogs.com/files/zichi/github.gif\"><\/a><\/li>";
+strVar += "  <li>Weibo：<a target=\"_blank\" href=\"http://weibo.com/hanzichi/\">@韩子迟<\/a><\/li>";
+strVar += "  <li>Email：hanzichi#outlook.com<\/li>";
+strVar += "  <li>我的简介：<a target=\"_blank\" href=\"http://www.cnblogs.com/zichi/p/about.html\">了解博主『 韩子迟 』<\/a><\/li>";
+strVar += "<\/ul>";
+strVar += "";
+strVar += "<h3>友情链接<\/h3>";
+strVar += "<ul>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/coco1s/\">ChokCoco<\/a><\/li>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/vajoy/\">vajoy<\/a><\/li>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/dojo-lzz/\">木神<\/a><\/li>"
+strVar += "<\/ul>";
+
+var myInfo = document.createElement("div");
+myInfo.innerHTML = strVar;
+var parentNode = document.getElementById("leftmenu");
+parentNode.insertBefore(myInfo, parentNode.childNodes[4]);
+
+// cnzz 统计
+var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1258036937'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol +
+    "s4.cnzz.com/z_stat.php%3Fid%3D1258036937%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+</script><span id="cnzz_stat_icon_1258036937"><a href="http://www.cnzz.com/stat/website.php?web_id=1258036937" target="_blank">站长统计</a><a href="http://www.cnzz.com/stat/website.php?web_id=1258036937" target="_blank"> |  今日IP[109] | 今日PV[125] | 昨日IP[287] |  昨日PV[371] | </a><a href="http://www.cnzz.com/stat/website.php?web_id=1258036937&amp;method=online" target="_blank">当前在线[8]</a></span><script src="./用git bash往github-push代码_files/z_stat.php" type="text/javascript"></script><script src="./用git bash往github-push代码_files/core.php" charset="utf-8" type="text/javascript"></script>
+<!--PageEndHtml Block End-->
+
+
+</body></html>

@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>初学git：用git bash往github push代码 - 韩子迟 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=-hy83QNg62d4qYibixJzxMJkbf1P9fTBlqv7SK5zVL01"/>
+<link id="MainCss" type="text/css" rel="stylesheet" href="/skins/MTClean/bundle-MTClean.css?v=A4sgx-tcV5mqPq9wasevPAbBGnscmp2wrfuWlehfOX41"/>
+<link type="text/css" rel="stylesheet" href="/blog/customcss/199121.css?v=%2fP7CUDNeCaCL5P7HHJdj73AO1Is%3d"/>
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/MTClean/bundle-MTClean-mobile.css?v=d9LctKHRIQp9rreugMcQ1-UJuq_j1fo0GZXTXj8Bqrk1"/>
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/zichi/rss"/>
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/zichi/rsd.xml"/>
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/zichi/wlwmanifest.xml"/>
+<script src="//common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">var currentBlogApp = 'zichi', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="/bundles/blog-common.js?v=taItysi72HxMPeH9Xg5nAYabRul6hhgahi3tVIMIKV81" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<a class="git-link" href="https://github.com/hanzichi"></a>
+<!--PageBeginHtml Block End-->
+
+<div id="top">
+
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/zichi/">simplify the life</a></h1>
+<p id="tagline"></p>
+</div>
+<div id="main">
+	
+<div id="post_detail">
+	<div class="post">
+		<h2>
+			<a id="cb_post_title_url" href="http://www.cnblogs.com/zichi/p/4703999.html">初学git：用git bash往github push代码</a>
+		</h2>
+		<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown"><p>对于我来说，最开始使用github主要是为了使用它的<a href="https://pages.github.com/">pages</a>功能展示demo。其实这些都是用<a href="https://windows.github.com/">Github for Windows</a> push上去的，图形化界面的客户端使用确实简单，但是逼格不够，好吧其实是各种原因下不了客户端，正好给我一个探索terminal方式的机会。</p>
+<h3 id="github账号注册-msysgit的安装">1、github账号注册 &amp; msysgit的安装</h3>
+<hr />
+<p>言归正传，简单介绍下怎样利用git bash操作远端的github代码。首先得有git和github的基本概念，git是版本控制工具，而github相当于一个“免费”的服务器了（一般公司会搭建自己的git服务器）。然后可以注册个<a href="https://github.com/">github</a>的账号，很简单，分分钟注册完。之后，得在本地安装<a href="https://git-for-windows.github.io/">msysgit</a>，安装完后，你会发现多了git bash和git gui，顾名思义一个是terminal方式一个是图形用户界面的方式。</p>
+<h3 id="设置用户信息">2、设置用户信息</h3>
+<hr />
+<p>git要求使用者必须提供自己的身份标识，为此我们需要在git bash中执行以下命令（当然不设置也行，每次提交都是unknown... macOS 貌似会提交系统用户名）：</p>
+<pre><code>$ git config --global user.name &quot;hanzichi&quot; //给自己起个用户名
+$ git config --global user.email  &quot;abc@gmail.com&quot; //填写自己的邮箱</code></pre>
+<h3 id="获取密钥">3、<a href="https://help.github.com/articles/generating-ssh-keys/">获取密钥</a></h3>
+<hr />
+<p>2017.02.15: 以下步骤可能会过时，或者仅适用于 windows 系统，可参考 <a href="https://help.github.com/articles/connecting-to-github-with-ssh/" class="uri">https://help.github.com/articles/connecting-to-github-with-ssh/</a> 获取更详细步骤</p>
+<p>GitHub选择的默认通信方式是SSH(对SSH感兴趣的可以参考阮老师的文章<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a> <a href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH原理与运用（二）：远程操作与端口转发</a>)，如果没有配置SSH key就只能clone代码不能push上去（只读），所以要先在Git里面生成SHH Key。如果在当前用户的第一级文件夹下有<code>.ssh</code>文件夹，说明以前可能使用过git，把该文件夹删除（或者先备份再删除，防止意外）。</p>
+<p>获得密钥：</p>
+<pre><code>ssh-keygen -t rsa -C &quot;abc@gmail.com&quot; //填写email地址，然后一直“回车”ok</code></pre>
+<p>打开本地..\.ssh\id_rsa.pub文件。此文件里面内容为刚才生成的密钥。然后把该密钥复制到github的<a href="https://github.com/settings/ssh">setting/ssh</a>中，点击打开页面的add SSH key按钮，title任意，把key值复制进去。</p>
+<p>经过上述配置，你的Git应该可以通过SSH连接GitHub服务器了，可以测试一把（配置完SSH key后，就表示本地能操作该用户下的库，能提交代码了）：</p>
+<pre><code>ssh -T git@github.com</code></pre>
+<p>提示像我这样：Hi hanzichi! You've successfully authenticated, but GitHub does not provide shell access. 那就说明连接成功了。</p>
+<h3 id="远程操作">4、远程操作</h3>
+<hr />
+<p>确认本地和github的服务器可以通信后，就可以拉代码、push代码了。</p>
+<p>可以使用现有的项目或者fork的项目，这里为了测试，我新建了个<a href="https://github.com/hanzichi/helloworld">helloworld项目</a>，然后打开git bash，进入自己要克隆文件的目录，用git clone命令把该项目克隆到本地。</p>
+<pre><code>git clone git@github.com:hanzichi/helloworld.git</code></pre>
+<p><strong>推荐用SSH的地址，而不是HTTPS，这样就不用每次输用户名密码了。</strong></p>
+<p>克隆完后，打开helloworld文件夹，里面有个隐藏的<code>.git</code>文件夹，还有个README的md文件，这是在创建项目的时候设置添加的。接着就可以往里面添加文件了。比如我在helloworld文件夹下写了一个index.html文件和一个index.js文件，我要把它们添加到远程项目库中。</p>
+<pre><code>git add . // 要add的文件，. 表示添加所有
+git commit -m &#39;add files&#39; // 提交更新
+git push origin master  // push到远端master上</code></pre>
+<p>这样操作后文件就提交到远端去了！ 注意只有最后一步和github有关！</p>
+<h3 id="notice">notice</h3>
+<hr />
+<p>这里再提点别的，还是像以上操作在github创建了一个helloworld项目，可以不先克隆，而在本地创建一个helloworld文件夹，右击文件夹用<code>git init</code>命令初始化git环境，然后关联 GitHub 中的项目（需要先创建）：</p>
+<pre><code>git remote add origin git@github.com:hanzichi/helloworld.git</code></pre>
+<p>然后就是普通的 add、commit 和 push 操作了（第一次可能需要 git push -u origin master）</p>
+<p>如果出现错误，提示：fatal: remote origin already exists 则可直接push</p>
+<p>如果在执行 git push origin master 时报错：error:failed to push som refs to.......</p>
+<p>则可先执行：</p>
+<pre><code> git pull origin master</code></pre>
+<p>先把远程服务器github上面的文件拉先来，再push 上去。</p>
+<p><strong>参考</strong></p>
+<ol>
+<li><a href="关于初学者上传文件到github的方法" class="uri">关于初学者上传文件到github的方法</a></li>
+<li><a href="http://www.cnblogs.com/fnng/archive/2011/08/25/2153807.html">git/github学习笔记</a></li>
+<li><a href="http://wuyuans.com/2012/05/github-simple-tutorial/">github简单使用教程</a></li>
+<li><a href="http://www.worldhello.net/gotgithub/03-project-hosting/030-repo-authz.html">公钥认证管理</a></li>
+</ol>
+</div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info">
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"></div>
+</div>
+
+
+		<p class="postfoot">
+			posted on <span id="post-date">2015-08-05 10:23</span> <a href='http://www.cnblogs.com/zichi/'>韩子迟</a> 阅读(<span id="post_view_count">...</span>) 评论(<span id="post_comment_count">...</span>)  <a href ="https://i.cnblogs.com/EditPosts.aspx?postid=4703999" rel="nofollow">编辑</a> <a href="#" onclick="AddToWz(4703999);return false;">收藏</a>
+		</p>
+	</div>
+	<script src="//common.cnblogs.com/highlight/9.1.0/highlight.min.js?id=20160127"></script><script>markdown_highlight();</script><script type="text/javascript">var allowComments=true,cb_blogId=199121,cb_entryId=4703999,cb_blogApp=currentBlogApp,cb_blogUserGuid='cd02e9fc-9343-e411-b908-9dcfd8948a71',cb_entryCreatedDate='2015/8/5 10:23:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id='comment_form' class='commentform'>
+<a name='commentform'></a>
+<div id='divCommentShow'></div>
+<div id='comment_nav'><span id='span_refresh_tips'></span><a href='javascript:void(0);' onclick='return RefreshCommentList();' id='lnk_RefreshComments' runat='server' clientidmode='Static'>刷新评论</a><a href='#' onclick='return RefreshPage();'>刷新页面</a><a href='#top'>返回顶部</a></div>
+<div id='comment_form_container'></div>
+<div class='ad_text_commentbox' id='ad_text_under_commentbox'></div>
+<div id='ad_t2'></div>
+<div id='opt_under_post'></div>
+<div id='cnblogs_c1' class='c_ad_block'></div>
+<div id='under_post_news'></div>
+<div id='cnblogs_c2' class='c_ad_block'></div>
+<div id='under_post_kb'></div>
+<div id='HistoryToday' class='c_ad_block'></div>
+<script type='text/javascript'>
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+</div>
+<div id="leftmenu">
+
+	
+<h3>导航</h3>
+<ul>
+			<li><a id="blog_nav_sitehome" href="http://www.cnblogs.com/">博客园</a></li>
+			<li><a id="blog_nav_myhome" href="http://www.cnblogs.com/zichi/">首页</a></li>
+			<li><a id="blog_nav_contact" accesskey="9" rel="nofollow" href="https://msg.cnblogs.com/send/%E9%9F%A9%E5%AD%90%E8%BF%9F">联系</a></li>
+			<li><a id="blog_nav_rss" href="http://www.cnblogs.com/zichi/rss">订阅</a> <a id="blog_nav_rss_image" href="http://www.cnblogs.com/zichi/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>
+			<li><a id="blog_nav_admin" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+	<div id="blog_stats">
+<h3>统计信息</h3>
+	<ul>
+		<li>随笔 - 253
+		<li>文章 - 0
+		<li>评论 - 923
+		<li>Trackbacks - 0
+	</li>
+</ul></div>
+	
+<h3>News</h3>
+	<ul>
+	  <li><div id="blog-news"></div><script type="text/javascript">loadBlogNews();</script></li>
+	</ul>
+
+	<div id="blog-sidecolumn"></div><script type="text/javascript">loadBlogSideColumn();</script>
+
+</div>
+
+<p id="footer">
+	Powered by: 
+	<br />
+	
+	<a id="Footer1_Hyperlink3" NAME="Hyperlink1" href="http://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br />
+	Copyright &copy; 韩子迟
+</p>
+<!--PageEndHtml Block Begin-->
+<script src="//files.cnblogs.com/files/zichi/clipboard.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-modal/0.8.2/jquery.modal.min.js"></script>
+<link href="//cdn.bootcss.com/jquery-modal/0.8.2/jquery.modal.min.css" rel="stylesheet">
+<script>
+// 插入 favicon.ico
+// 直接写在页首 HTML 中不起效
+var l = document.createElement('link');
+l.rel = "shortcut icon";
+l.href = "http://hanzichi.github.io/favicon.ico";
+document.getElementsByTagName("head")[0].appendChild(l);
+
+// 复制代码
+var code = $('#cnblogs_post_body pre code');
+var len = code.size();
+
+for (var i = 0; i < len; i++) {
+  var item = code.eq(i);
+  // 复制的元素
+  item.attr('id', 'bar' + i);
+  item.parent().css('position', 'relative');
+  $("<a/>", {
+    text: '复制代码',
+    href: 'javascript:;',
+    class: 'btn',
+    'data-clipboard-target': '#bar' + i,
+    'data-clipboard-action': 'copy'
+  }).insertBefore(item);
+}
+
+new Clipboard('.btn');
+
+// 每篇文章尾部统一内容
+if (document.getElementById('MySignature')) {
+  document.getElementById('MySignature').innerHTML = "<div>可能是史上最详细的 underscore 源码剖析：<a href='https://github.com/hanzichi/underscore-analysis'>https://github.com/hanzichi/underscore-analysis</a><br/>程序员都应该学点算法：<a href='https://github.com/hanzichi/leetcode'>https://github.com/hanzichi/leetcode</a><br/>了解博主韩子迟：<a href='http://www.cnblogs.com/zichi/p/about.html'>http://www.cnblogs.com/zichi/p/about.html</a><br/> GitHub：<a href='https://github.com/hanzichi'>https://github.com/hanzichi</a>  Follow 楼主给楼主更多写作的动力~</div>";
+}
+
+// 增加赞赏
+let alipayUrl = 'https://ws4.sinaimg.cn/large/006tKfTcgy1fj3vibepwgj30em0eq0v0.jpg'
+let wxUrl = 'https://ws3.sinaimg.cn/large/006tKfTcgy1fj3vimho4ij30i30ia3zi.jpg'
+let $reward = $(`
+  <div>
+    <div id="reward" style="display:none;">
+      <h1 class="title">赏杯咖啡 😄</h1>
+      <div class="detail">
+        <div class="qrcode">
+          <img width=215 src=${alipayUrl} />
+        </div>
+        <p>支付宝</p>
+      </div><div class="detail">
+        <div class="qrcode">
+          <img width=215 src=${wxUrl} />
+        </div>
+        <p>微 信</p>
+      </div>
+    </div>
+
+    <div class="reward-area" style="display:none">
+      <h1>原创不易，如果您觉得我的文章对您有帮助，不妨小额赞助～😄</h1>
+      👉<span class="subtitle">有任何技术或者情感方面的问题，不妨在下面留言或者发邮件给我 😁</span>
+      <a href="#reward" rel="modal:open">
+        <div class="reward-btn">
+          打赏支持
+        </div>
+      </a>
+    </div>
+  </div>
+  `)
+$('#MySignature').before($reward)
+
+// 右侧导航 个人信息&友链
+var strVar = "";
+strVar += "<h3>个人信息<\/h3>";
+strVar += "<ul>";
+strVar += "  <li><a target=\"_blank\" href=\"https://github.com/hanzichi\"><img class=\"github-pic\" src=\"https://files.cnblogs.com/files/zichi/github.gif\"><\/a><\/li>";
+strVar += "  <li>Weibo：<a target=\"_blank\" href=\"http://weibo.com/hanzichi/\">@韩子迟<\/a><\/li>";
+strVar += "  <li>Email：hanzichi#outlook.com<\/li>";
+strVar += "  <li>我的简介：<a target=\"_blank\" href=\"http://www.cnblogs.com/zichi/p/about.html\">了解博主『 韩子迟 』<\/a><\/li>";
+strVar += "<\/ul>";
+strVar += "";
+strVar += "<h3>友情链接<\/h3>";
+strVar += "<ul>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/coco1s/\">ChokCoco<\/a><\/li>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/vajoy/\">vajoy<\/a><\/li>";
+strVar += "  <li><a target=\"_blank\" href=\"http://www.cnblogs.com/dojo-lzz/\">木神<\/a><\/li>"
+strVar += "<\/ul>";
+
+var myInfo = document.createElement("div");
+myInfo.innerHTML = strVar;
+var parentNode = document.getElementById("leftmenu");
+parentNode.insertBefore(myInfo, parentNode.childNodes[4]);
+
+// cnzz 统计
+var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1258036937'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol +
+    "s4.cnzz.com/z_stat.php%3Fid%3D1258036937%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!--PageEndHtml Block End-->
+</body>
+</html>
