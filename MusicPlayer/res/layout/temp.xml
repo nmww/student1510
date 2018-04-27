@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:orientation="vertical" android:background="@drawable/background">
+
+
+
+
+
+
+<LinearLayout android:id="@+id/LinearLayout02" android:orientation="vertical" android:layout_gravity="center" android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginTop="58px"><LinearLayout android:id="@+id/LinearLayout06" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="40px"><ProgressBar android:id="@+id/ProgressBar01" style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="14px"></ProgressBar></LinearLayout><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center" android:layout_marginTop="13px"><LinearLayout android:id="@+id/LinearLayout04" android:layout_width="wrap_content" android:layout_height="wrap_content"><Button android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="visible" android:background="@drawable/pause" android:height="60px" android:width="75px"></Button>
+</LinearLayout><LinearLayout android:id="@+id/LinearLayout05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px"><Button android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/star" android:width="77px" android:height="88px"></Button></LinearLayout><LinearLayout android:id="@+id/LinearLayout03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px"><Button android:id="@+id/Button03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/stop" android:layout_marginLeft="6px" android:width="60px" android:height="60px"></Button>
+</LinearLayout>
+</LinearLayout>
+</LinearLayout>
+</LinearLayout>

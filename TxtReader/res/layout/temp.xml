@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:background="@drawable/green" android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+
+
+
+
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="390px"><TextView android:id="@+id/TextView01" android:scrollbars="vertical" android:layout_width="wrap_content" android:typeface="sans" android:textStyle="bold" android:layout_height="wrap_content"></TextView></ScrollView>
+<LinearLayout android:id="@+id/LinearLayout02" android:layout_width="wrap_content" android:layout_gravity="fill_horizontal" android:layout_height="35px"><Button android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="0px" android:text="Size" android:background="@drawable/button020"></Button><Button android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="80px" android:text="Color" android:background="@drawable/button040"></Button><Button android:id="@+id/Button03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="80px" android:text="Back" android:background="@drawable/button175"></Button>
+
+
+</LinearLayout>
+</LinearLayout>

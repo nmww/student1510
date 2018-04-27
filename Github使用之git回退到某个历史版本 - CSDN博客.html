@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://blog.csdn.net/yxys01/article/details/78454315"/> 
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="referrer" content="always">
+    <meta name="description" content="1、 使用git log命令查看所有的历史版本，获取某个历史版本的id， 
+       假设查到历史版本的id是139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96。 
+       2、 $ git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96         3、 把修改推到远程服务器$ git push" />
+    <meta name="keywords" content="github,git" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
+    <title>Github使用之git回退到某个历史版本 - CSDN博客</title>
+    
+            <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/detail-cdb0cfdd81.min.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-4e9c30ca0e.min.css">
+
+    <script type="text/javascript">
+        var username = "yxys01";
+        var blog_address = "https://blog.csdn.net/yxys01";
+        var static_host = "https://csdnimg.cn/release/phoenix/";
+        var currentUserName = ""; 
+        var isShowAds = true;
+        var isOwner = false;
+        var loginUrl = "https://passport.csdn.net/account/login?from=https://blog.csdn.net/yxys01/article/details/78454315"
+        var blogUrl = "https://blog.csdn.net/";
+        var curSkin = "skin-yellow";
+    </script>
+    <script type="text/javascript">
+        // Traffic Stats of the entire Web site By baidu
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6bcd52f51e9b3dce32bec4a3997715ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+        // Traffic Stats of the entire Web site By baidu end
+    </script>
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=github+%E4%B9%8B%E5%89%8D%E7%89%88%E6%9C%AC"  type="text/javascript"></script>
+        <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.5.js"></script>
+        <script type="text/javascript" src="https://csdnimg.cn/pubfooter/js/tracking-1.0.2.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="https://csdnimg.cn/public/sandalstrap/1.2/css/sandalstrap.min.css"> 
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+</head>
+<body>    
+    <link rel="stylesheet" href="https://csdnimg.cn/public/common/toolbar/content_toolbar_css/content_toolbar.css">
+    <script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>
+    <script src="https://csdnimg.cn/public/sandalstrap/1.2/fonts/csdnc/csdnc.js"></script><link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/blog_code-c3a0c33d5c.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
+<script>
+    var recommendCount = 10;
+    recommendCount = recommendCount > 1 ? recommendCount+1 : recommendCount;
+    var articleTit = 'Github使用之git回退到某个历史版本';
+    var ChannelId = 3;
+    var articleId = '78454315';
+    var commentscount = 0;
+    var islock = false;
+    var curentUrl = "https://blog.csdn.net/yxys01/article/details/78454315";
+    //1禁止评论，2正常
+    var commentAuth = 2;
+    //百度搜索
+    var baiduKey = "github+%E4%B9%8B%E5%89%8D%E7%89%88%E6%9C%AC";
+    var needInsertBaidu = false;;
+</script>
+
+<header>
+	<div class="container d-flex clearfix">
+		<div class="title-box">
+			<h6 class="title-blog">
+				<a href="https://blog.csdn.net/yxys01">你见，或者不见</a>
+			</h6>
+			<p class="description">这世界从不欣赏眼泪！</p>
+		</div>
+		<div class="opt-box d-flex justify-content-end">
+			<a class="btn btn-sm" href="https://blog.csdn.net/yxys01/rss/list">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#csdnc-rss"></use>
+					</svg>RSS订阅</a>
+					</div>
+	</div>
+</header><script src="https://dup.baidustatic.com/js/ds.js"></script>
+<div class="container clearfix pt0" id="mainBox">
+    <aside>
+		    <div id="asideProfile" class="aside-box">
+    <h3 class="aside-title">个人资料</h3>
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/yxys01">
+                <img src="https://avatar.csdn.net/F/D/5/3_yxys01.jpg" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex justify-content-center flex-column">
+            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                <a href="https://blog.csdn.net/yxys01" target="_blank" class="text-truncate" id="uid">yxys01</a>
+            </p>
+                    </div>
+                <div class="opt-box d-flex justify-content-center flex-column">
+            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
+                                <a class="btn btn-sm btn-red-hollow" href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/yxys01/article/details/78454315" target="_self">关注</a>
+                            </span>
+            
+        </div>
+            </div>
+    <div class="data-info d-flex item-tiling">
+        <dl class="text-center" title="178">
+            <dt>原创</dt>
+            <dd><span class="count">178</span></dd>
+        </dl>
+        <dl class="text-center" title="29">
+            <dt>粉丝</dt>
+            <dd id='fan'><span class="count">29</span></dd>
+        </dl>
+        <dl class="text-center" title="241">
+            <dt>喜欢</dt>
+            <dd><span class="count">241</span></dd>
+        </dl>
+        <dl class="text-center" title="26">
+            <dt>评论</dt>
+            <dd><span class="count">26</span></dd>
+        </dl>
+    </div>
+    <div class="grade-box clearfix">
+        <dl>
+            <dt>等级：</dt>
+            <dd>
+                <a href="https://blog.csdn.net/home/help.html#level" title="5级,点击查看等级说明" target="_blank">
+                    <svg class="icon icon-level" aria-hidden="true">
+                        <use xlink:href="#csdnc-bloglevel-5"></use>
+                    </svg>
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt>访问：</dt>
+            <dd title="235241">
+                23万+            </dd>
+        </dl>
+        <dl>
+            <dt>积分：</dt>
+            <dd title="4555">
+                4555            </dd>
+        </dl>
+        <dl title="8152">
+            <dt>排名：</dt>
+            <dd>8152</dd>
+        </dl>
+    </div>
+        <div class="badge-box d-flex">
+        <span>勋章：</span>
+                <a class="icon-badge" title="专栏达人">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-m-columns"></use>
+            </svg>
+            <div class="icon-arrow"></div>
+            <div class="grade-detail-box item1">
+                <div class="pos-box">
+                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#csdnc-m-columns"></use>
+                        </svg>
+                        <p>专栏达人</p>
+                    </div>
+                    <div class="right-box d-flex justify-content-center align-items-center">
+                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    </div>
+                </div>
+            </div> 
+        </a>  
+                                    </div>
+    </div>		    <div class="csdn-tracking-statistics mb8 box-shadow" data-pid="blog" data-mod="popu_4" style="height:250px;">
+    <div class="aside-content text-center" id="cpro_u2734133">
+        <!-- 投放代码 -->
+        <script type="text/javascript" src="//cee1.iteye.com/lgyyovfyh.js"></script>
+    </div>
+</div>
+		    <div id="asideNewArticle" class="aside-box">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix csdn-tracking-statistics tracking-click" data-mod="popu_382">
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/yxys01/article/details/79291726" target="_blank">如何阻止你的 iPhone 系统升级到 iOS11</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/yxys01/article/details/79224803" target="_blank">一起了解什么是高并发</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/yxys01/article/details/78977658" target="_blank">GitHub 年度报告，2017年最具价值的十大开源项目！</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/yxys01/article/details/78977458" target="_blank">展望2018</a>
+            </li>
+                        <li class="clearfix">
+                <a href="https://blog.csdn.net/yxys01/article/details/78963412" target="_blank">互联网程序员行话（黑话）合集</a>
+            </li>
+                    </ul>
+    </div>
+</div>
+		    <div id="asideColumn" class="aside-box flexible-box">
+    <h3 class="aside-title">博主专栏</h3>
+    <div class="aside-content">
+        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17583.html">
+                            <img src="https://img-blog.csdn.net/20170930104242535?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17583.html">iOS自动化测试</a></p>
+                        <div class="data">阅读量：<span>32910</span><span class="count">35 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17653.html">
+                            <img src="https://img-blog.csdn.net/20171009150251500?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17653.html">iOS学习--从入门到实战</a></p>
+                        <div class="data">阅读量：<span>85029</span><span class="count">151 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17659.html">
+                            <img src="https://img-blog.csdn.net/20171009180044279?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17659.html">Golang自学及项目实战</a></p>
+                        <div class="data">阅读量：<span>5978</span><span class="count">16 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17669.html">
+                            <img src="https://img-blog.csdn.net/20171011084651990?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17669.html">Web开发</a></p>
+                        <div class="data">阅读量：<span>21172</span><span class="count">25 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17729.html">
+                            <img src="https://img-blog.csdn.net/20171017110246381?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17729.html">iOS远程真机</a></p>
+                        <div class="data">阅读量：<span>15487</span><span class="count">10 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17792.html">
+                            <img src="https://img-blog.csdn.net/20171022182735519?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17792.html">Objective-C学习</a></p>
+                        <div class="data">阅读量：<span>25036</span><span class="count">54 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17793.html">
+                            <img src="https://img-blog.csdn.net/20171022183047508?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17793.html">Swift学习</a></p>
+                        <div class="data">阅读量：<span>1523</span><span class="count">3 篇</span></div>
+                    </div>
+                </li>
+                            <li class="clearfix">
+                    <div class="img-box float-left">
+                        <a class="d-flex align-items-center" href="https://blog.csdn.net/column/details/17794.html">
+                            <img src="https://img-blog.csdn.net/20171022184057036?imageView2/5/w/120/h/120" alt="">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <p class="title"><a href="https://blog.csdn.net/column/details/17794.html">常用开发工具合集</a></p>
+                        <div class="data">阅读量：<span>14443</span><span class="count">24 篇</span></div>
+                    </div>
+                </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">个人分类</h3>
+    <div class="aside-content">
+        <ul>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6992809">
+                    iOS学习                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6296965">
+                    Objective-C学习                    <span class="count float-right">54篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6296964">
+                    Swift学习                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6245951">
+                    Objective-C内存管理学习                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6246605">
+                    Objective-C弹出模态                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6246755">
+                    Objective-C之UI控件                    <span class="count float-right">20篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6253429">
+                    GCD多线程编程                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6261259">
+                    Objective-C多点触摸与手势检测                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6272417">
+                    Objective-C动画                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6279296">
+                    iOS项目之BUG解决                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6307639">
+                    iOS实战演练                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6517005">
+                    Objective-C面试                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6979431">
+                    iOS开发之Xcode                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7101795">
+                    Mac                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6994738">
+                    iOS源码资源                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6979743">
+                    iOS自动化测试                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7085585">
+                    iOS远程真机                    <span class="count float-right">10篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6998099">
+                    自动化测试工具之macaca                    <span class="count float-right">8篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6979386">
+                    自动化测试工具之appium                    <span class="count float-right">11篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6980317">
+                    Shell命令                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6994829">
+                    Github使用                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6995874">
+                    Markdown使用                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7101639">
+                    Curl                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6295964">
+                    Web开发                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7181371">
+                    PHP                    <span class="count float-right">12篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6278462">
+                    Firefox                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6861587">
+                    C#                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6969997">
+                    Android                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7036356">
+                    Java                    <span class="count float-right">13篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7109994">
+                    WebSocket                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7116194">
+                    JavaScript                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7117252">
+                    Go                    <span class="count float-right">16篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6845335">
+                    WPF                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7137244">
+                    开发工具合集                    <span class="count float-right">7篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/6297001">
+                    非技术文章                    <span class="count float-right">17篇</span>
+                </a>
+            </li>
+                        <li>
+                <a href="https://blog.csdn.net/yxys01/article/category/7261090">
+                    个人博客                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideArchive" class="aside-box flexible-box">
+    <h3 class="aside-title">归档</h3>
+    <div class="aside-content">
+        <ul class="archive-list">
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2018/02">
+                    2018年2月                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2018/01">
+                    2018年1月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/11">
+                    2017年11月                    <span class="count float-right">9篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/10">
+                    2017年10月                    <span class="count float-right">18篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/09">
+                    2017年9月                    <span class="count float-right">24篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/08">
+                    2017年8月                    <span class="count float-right">37篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/07">
+                    2017年7月                    <span class="count float-right">35篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/06">
+                    2017年6月                    <span class="count float-right">55篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2017/04">
+                    2017年4月                    <span class="count float-right">14篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/12">
+                    2016年12月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/11">
+                    2016年11月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/08">
+                    2016年8月                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/07">
+                    2016年7月                    <span class="count float-right">15篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/06">
+                    2016年6月                    <span class="count float-right">25篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/05">
+                    2016年5月                    <span class="count float-right">93篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/04">
+                    2016年4月                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2016/02">
+                    2016年2月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2015/04">
+                    2015年4月                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+                        <!--归档统计-->
+            <li>
+                <a href="https://blog.csdn.net/yxys01/article/month/2015/03">
+                    2015年3月                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+                    </ul>
+    </div>
+        <p class="text-center">
+        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
+    </p>
+    </div>
+		    <div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
+							<li>
+					<a href="https://blog.csdn.net/yxys01/article/details/73848720">Mac之zip unzip 命令（压缩）</a>
+					<p class="read">阅读量：<span>6960</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/yxys01/article/details/51579477">GCD学习之dispatch_suspend/dispatch_resume</a>
+					<p class="read">阅读量：<span>4590</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/yxys01/article/details/73607452">Appium之appium-desktop使用指南</a>
+					<p class="read">阅读量：<span>4146</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/yxys01/article/details/70598030">WPF实战之绘制动态曲线之DynamicDataDisplay（一）</a>
+					<p class="read">阅读量：<span>4137</span></p>
+				</li>
+							<li>
+					<a href="https://blog.csdn.net/yxys01/article/details/78036834">PHP使用之修改php.ini 配置文件（Mac）</a>
+					<p class="read">阅读量：<span>3645</span></p>
+				</li>
+					</ul>
+	</div>
+</div>
+		    <div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/yxys01/article/details/73161962#comments">Mac之系统中各个文件夹详细介绍</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/JiaJunLee" class="user-name" target="_blank">JiaJunLee</a>：/usr 是 unix system resources的简写，不是“UNIX的使用者专用档桉夹”。                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/yxys01/article/details/70225294#comments">WPF实战之引用DynamicDa...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/sadmathlovergo" class="user-name" target="_blank">sadmathlovergo</a>：博主，求问开发文档怎么下载呀？那个网址进去后并没有开发文档的下载呀                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/yxys01/article/details/73558466#comments">Appium之无法Launch A...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/qq_22695801" class="user-name" target="_blank">qq_22695801</a>：执行appium-doctor报错✖ Bin directory for $JAVA_HOME i...                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/yxys01/article/details/78217003#comments">Web开发之html2canvas...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/wo_buzhidao" class="user-name" target="_blank">wo_buzhidao</a>：你这个是哪个版本的库                </p>
+            </li>
+                        <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/yxys01/article/details/78212879#comments">Web开发之用canvas2ima...</a>
+                <p class="comment">
+                    <a href="https://my.csdn.net/wo_buzhidao" class="user-name" target="_blank">wo_buzhidao</a>：demo是好的，但是本地搭建就不行了，不知道啥原因，代码对比了，下载的没后缀名                </p>
+            </li>
+                    </ul>
+    </div>
+</div>
+		<div id="asideFooter">
+			
+		<div class="aside-box">
+						<script type="text/javascript" src="//cee1.iteye.com/mhzzpwgzj.js"></script>
+					</div>
+				<div class="aside-box">
+			<div class="persion_article">
+			</div>
+		</div>
+	</div>
+</aside>
+<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js?20180309" data-isfootertrack="false" type="text/javascript"></script>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).remove();
+	})
+</script>
+    <main>
+        <div class="blog-content-box">
+	<div class="article-title-box">
+			<span class="article-type type-1 float-left">原</span>		<h6 class="title-article">Github使用之git回退到某个历史版本</h6>
+	</div>
+	<div class="article-info-box">
+		<div class="article-bar-top d-flex">
+												<span class="time">2017年11月06日 09:14:13</span>
+			<div class="float-right">
+				<span class="read-count">阅读数：657</span>
+											</div>
+		</div>
+	</div>
+	<article>
+		<div id="article_content" class="article_content csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+                    <div class="markdown_views">
+                <h3 id="1-查找历史版本">1、 查找历史版本</h3>
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp;使用<code>git log</code>命令查看所有的历史版本，获取你git的某个历史版本的id</p>
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp;假设查到历史版本的id是<code>fae6966548e3ae76cfa7f38a461c438cf75ba965</code>。</p>
+
+
+
+<h3 id="2-恢复到历史版本">2、 恢复到历史版本</h3>
+
+<pre class="prettyprint"><code class=" hljs brainfuck"><span class="hljs-comment">$</span> <span class="hljs-comment">git</span> <span class="hljs-comment">reset</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">hard</span> <span class="hljs-comment">fae6966548e3ae76cfa7f38a461c438cf75ba965</span></code></pre>
+
+
+
+<h3 id="3-把修改推到远程服务器">3、 把修改推到远程服务器</h3>
+
+<pre class="prettyprint"><code class=" hljs lasso">$ git push <span class="hljs-attribute">-f</span> <span class="hljs-attribute">-u</span> origin master  </code></pre>            </div>
+                        <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/markdown_views-ea0013b516.css" />
+                            </div>
+				<div class="hide-article-box text-center csdn-tracking-statistics tracking-click" data-mod="popu_376">
+			<a class="btn btn-red-hollow" id="btn-readmore">阅读更多</a>
+		</div>
+        	</article>
+	
+		<div class="article-bar-bottom">
+				<div class="article-copyright">
+			版权声明：本文为博主原创文章，未经博主允许不得转载。			https://blog.csdn.net/yxys01/article/details/78454315		</div>
+						<div class="tags-box artic-tag-box">
+			<span class="label">文章标签：</span>
+						<a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=github&t=blog" target="_blank">github						<a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=git&t=blog" target="_blank">git						<a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=回退&t=blog" target="_blank">回退						<a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=版本&t=blog" target="_blank">版本						<a class="tag-link" href="http://so.csdn.net/so/search/s.do?q=历史&t=blog" target="_blank">历史						</a>
+		</div>
+						<div class="tags-box">
+			<span class="label">个人分类：</span>
+						<a class="tag-link" href="https://blog.csdn.net/yxys01/article/category/6994829"  target="_blank">Github使用						</a>
+		</div>
+					</div>
+	
+	<!-- !empty($pre_next_article[0]) -->
+		</div>
+<script>
+    $(".MathJax").remove();
+</script>
+<script type="text/javascript" src="https://static-blog.csdn.net/mdeditor/public/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config"> 
+    MathJax.Hub.Config({ 
+			"HTML-CSS": { 
+					linebreaks: { automatic: true, width: "94%container" },
+					imageFont: null
+			},
+			tex2jax: {
+				preview: "none"
+			},
+			mml2jax: {
+				preview: 'none'
+			}
+	});
+</script>
+<script>
+	(function(){
+		var btnReadmore = $("#btn-readmore");
+		if(btnReadmore.length>0){
+			var winH = $(window).height();
+			var articleBox = $("div.article_content");
+			var artH = articleBox.height();
+			if(artH > winH*2){
+				articleBox.css({
+					'height':winH*2+'px',
+					'overflow':'hidden'
+				})
+				btnReadmore.click(function(){
+					articleBox.removeAttr("style");
+					$(this).parent().remove();
+				})
+			}else{
+				btnReadmore.parent().remove();
+			}
+		}
+	})()
+</script>        <div class="edu-promotion"></div>
+        <a id="commentBox"></a>
+<div class="comment-box">
+	  	<div class="unlogin-box text-center">
+		想对作者说点什么？
+		<!-- $curl 当前地址 -->
+		<a href="https://passport.csdn.net/account/login?from=https://blog.csdn.net/yxys01/article/details/78454315#commentBox" class="btn btn-sm btn-red">我来说一句</a>
+	</div>
+			<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<button class="btn btn-sm btn-link-blue" id="btnMoreComment"></button>
+		</div>
+	</div>
+</div>        <div class="recommend-box">
+            		<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://edu.csdn.net/course/detail/4537?utm_source=blogre1" target="_blank" strategy="EduRecommendInPriority_0">
+				用git和github来拉近和大牛的距离			</a>
+		</h4>
+		<p class="content">
+			<a href="https://edu.csdn.net/course/detail/4537?utm_source=blogre1" target="_blank" strategy="EduRecommendInPriority_0">
+				用git和github来拉近和大牛的距离			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<span class="read-num">学院</span>
+			</p>
+			<p>
+				<span class="date">2017年03月24日 15:29</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/lein_wang/article/details/9137299" target="_blank" strategy="BlogCommendFromBaidu_1">
+				github 查看单个文件的历史记录命令			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/lein_wang/article/details/9137299" target="_blank" strategy="BlogCommendFromBaidu_1">
+				gitk 安装： apt-get install gitk
+点击打开链接http://stackoverflow.com/questions/278192/view-the-change-histo...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/lein_wang" title="lein_wang" target="_blank">
+					<img src="https://avatar.csdn.net/5/1/8/3_lein_wang.jpg" alt="lein_wang" class="avatar-pic">
+					<span class="name">lein_wang</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2013-06-20 15:10:23</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：4824</span>
+			</p>
+		</div>
+	</div>
+				<div class="recommend-item-box recommend-ad-box">
+
+			
+				<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+				<script>
+					NEWS_FEED({
+						w: 800,
+						h : 120,
+						showid : 'GNKXx7',
+						inject : 'define',
+						define : {
+							imagePosition : 'right',
+							imageBorderRadius : 0,
+							imageWidth: 120,
+							imageHeight: 90,
+							imageFill : 'clip',
+							displayImage : true,
+							displayTitle : true,
+							titleFontSize: 20,
+							titleFontColor: '#000',
+							titleFontFamily : 'Microsoft Yahei',
+							titleFontWeight: 'bold',
+							titlePaddingTop : 0,
+							titlePaddingRight : 0,
+							titlePaddingBottom : 10,
+							titlePaddingLeft : 0,
+							displayDesc : true,
+							descFontSize: 14,
+							descFontColor: '#8e959a',
+							descFontFamily : 'Microsoft Yahei',
+							paddingTop : 20,
+							paddingRight : 0,
+							paddingBottom : 10,
+							paddingLeft : 0,
+							backgroundColor: '#fff',
+							hoverColor: '#000'
+						}
+					})
+				</script>
+
+			
+		</div>
+				<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/u012150179/article/details/24889109" target="_blank" strategy="BlogCommendFromBaidu_2">
+				Git历史版本穿梭（涉及GitHub相关操作）			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/u012150179/article/details/24889109" target="_blank" strategy="BlogCommendFromBaidu_2">
+				younghz原创，转载请注明出处：
+
+
+本篇博文主要说明两个问题：
+1、  Git作为版本控制系统，那么他就应该具备在各次提交之间穿梭的能力，这里首先就先说恢复到历史提交的方法，也就是rol...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/u012150179" title="u012150179" target="_blank">
+					<img src="https://avatar.csdn.net/A/5/7/3_u012150179.jpg" alt="u012150179" class="avatar-pic">
+					<span class="name">u012150179</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2014-05-02 22:36:25</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：5129</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/ljl86400/article/details/79359684" target="_blank" strategy="BlogCommendFromBaidu_3">
+				如何查看github中的commit内容			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/ljl86400/article/details/79359684" target="_blank" strategy="BlogCommendFromBaidu_3">
+				刚开始学习使用github，用的不是很熟，学会了branches的概念、学会了pull、push，今天早上突然想如果我想查看我新提交的改动内容，或者想看看别人新提交的改动内容，应该如何实现。第一种方法...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/ljl86400" title="ljl86400" target="_blank">
+					<img src="https://avatar.csdn.net/9/D/1/3_ljl86400.jpg" alt="ljl86400" class="avatar-pic">
+					<span class="name">ljl86400</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2018-02-24 11:19:17</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：300</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/tskyming/article/details/42171221" target="_blank" strategy="BlogCommendFromBaidu_4">
+				[Git] 获取指定的历史版本代码			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/tskyming/article/details/42171221" target="_blank" strategy="BlogCommendFromBaidu_4">
+				最近项目更新比较频繁，Tag，打的不及时，PM 让用原来版本测试
+API 的兼容性，然后就 SX 了，代码不能回滚到原来呀，然后想了想
+这么牛B的 Git 肯定有方法解决，然后两条命令搞定。
+首...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/tskyming" title="tskyming" target="_blank">
+					<img src="https://avatar.csdn.net/1/1/5/3_tskyming.jpg" alt="tskyming" class="avatar-pic">
+					<span class="name">tskyming</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2014-12-26 14:25:04</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：29752</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/i0048egi/article/details/55508310" target="_blank" strategy="BlogCommendFromBaidu_5">
+				git revert 后悔了 还原修改前的版本  + git 常用命令			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/i0048egi/article/details/55508310" target="_blank" strategy="BlogCommendFromBaidu_5">
+				昨天手残 然后在GitHub for windows 上点了revert 然后就给重置了 更手残的是又给同步了 .  但是 GitHub 会保留之前的版本 . 只要删掉本次修改就可.
+解决方案:  ...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/i0048egi" title="i0048egi" target="_blank">
+					<img src="https://avatar.csdn.net/4/9/8/3_i0048egi.jpg" alt="i0048egi" class="avatar-pic">
+					<span class="name">i0048egi</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2017-02-17 13:24:02</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：5095</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box recommend-ad-box" id="yd_a_d_feed_0">
+			<script>
+				var new_element = document.createElement("script"); 
+        new_element.setAttribute("async", "async"); 
+        new_element.setAttribute("charset", "utf-8"); 
+        new_element.setAttribute("data-notify", "inforFlowMulti_notify");
+        new_element.setAttribute("src", "https://shared.ydstatic.com/js/yatdk/3.0.0/stream.js");
+        new_element.setAttribute("data-id", "8935aa488dd58452b9e5ee3b44f1212f");
+
+        new_element.setAttribute("data-insert-nodes", "yd_a_d_feed_0");
+
+        new_element.setAttribute("data-pos", "inline");
+        new_element.setAttribute("data-img-Style", "float:right;width:120px;");
+        new_element.setAttribute("data-des-Style", "color: #8e959a;line-height: 24px;font-size:14px;font-family: 'PingFang SC', 'Microsoft YaHei', SimHei, Arial, SimSun;");
+        new_element.setAttribute("data-tit-Style", "font-size:20px;font-weight:bold;margin-bottom:10px;font-family: 'PingFang SC', 'Microsoft YaHei', SimHei, Arial, SimSun;");
+        new_element.setAttribute("data-div-Style", "background-image: url(//img-ads.csdn.net/2016/201608021757063065.png);background-repeat: no-repeat;background-position: bottom left;");
+        document.body.appendChild(new_element);
+			</script>
+		</div>
+			<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/yh_zeng2/article/details/74858283" target="_blank" strategy="BlogCommendFromBaidu_6">
+				GitHub恢复本地被删除的文件			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/yh_zeng2/article/details/74858283" target="_blank" strategy="BlogCommendFromBaidu_6">
+				场景：项目使用的是GitHub作为版本控制器，在本地不小心上了WebContent/WEB-INF/web.xml 文件，要怎么恢复被删除的web.xml文件呢？
+ 
+解决方案：使用git check...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/yh_zeng2" title="yh_zeng2" target="_blank">
+					<img src="https://avatar.csdn.net/5/5/0/3_yh_zeng2.jpg" alt="yh_zeng2" class="avatar-pic">
+					<span class="name">yh_zeng2</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2017-07-09 12:12:17</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：1362</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/neuldp/article/details/51883528" target="_blank" strategy="BlogCommendFromBaidu_7">
+				git常用指令 github版本回退 reset			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/neuldp/article/details/51883528" target="_blank" strategy="BlogCommendFromBaidu_7">
+				常用流程1. git clone xxx (xxx是已经fork的，自己的repo)2. cd xxx; git remote add somemarks  YYY (YYY是master的repo,...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/neuldp" title="neuldp" target="_blank">
+					<img src="https://avatar.csdn.net/F/7/9/3_neuldp.jpg" alt="neuldp" class="avatar-pic">
+					<span class="name">neuldp</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2016-07-11 19:50:15</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：6593</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/qq_26427335/article/details/49934691" target="_blank" strategy="BlogCommendFromBaidu_8">
+				GitHub版本回退			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/qq_26427335/article/details/49934691" target="_blank" strategy="BlogCommendFromBaidu_8">
+				git add     readme.txt
+git commit -m &quot;描述&quot;
+git log         查看提交历史，以便确定要回退到哪个版本
+git diff     查看尚未暂存的文件...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/qq_26427335" title="qq_26427335" target="_blank">
+					<img src="https://avatar.csdn.net/A/A/4/3_qq_26427335.jpg" alt="qq_26427335" class="avatar-pic">
+					<span class="name">qq_26427335</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2015-11-19 22:01:50</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：2603</span>
+			</p>
+		</div>
+	</div>
+					<div class="recommend-item-box csdn-tracking-statistics" data-mod="popu_614" data-poputype="feed"  data-feed-show="false"  data-dsm="post">
+		<h4 class="text-truncate">
+			<a href="https://blog.csdn.net/u011455582/article/details/51843266" target="_blank" strategy="BlogCommendFromBaidu_9">
+				github版本回退			</a>
+		</h4>
+		<p class="content">
+			<a href="https://blog.csdn.net/u011455582/article/details/51843266" target="_blank" strategy="BlogCommendFromBaidu_9">
+				碰到了如下情形：
+  clone了别人的仓库，然后直接在master分支上做了很多commit，现在发现对方版本里有个bug，怎样才能只提交这个修复bug的commit，而不提交前面的commit？
+...			</a>
+		</p>
+		<div class="info-box d-flex align-content-center">
+			<p>
+				<a class="avatar" src="https://blog.csdn.net/u011455582" title="u011455582" target="_blank">
+					<img src="https://avatar.csdn.net/F/9/F/3_u011455582.jpg" alt="u011455582" class="avatar-pic">
+					<span class="name">u011455582</span>
+				</a>
+			</p>
+			<p>
+				<span class="date">2016-07-06 23:43:56</span>
+			</p>
+			<p>
+				<span class="read-num">阅读数：761</span>
+			</p>
+		</div>
+	</div>
+			            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+    </main>
+</div>
+<div class="mask-dark"></div>
+<div class="report-box">
+    <div class="pos-box">
+        <h2 class="title">不良信息举报</h2>
+        <a class="btn-close">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#csdnc-times"></use>
+            </svg>
+        </a>
+        <form id="frmReport">
+            <div class="form-box">
+                <div class="txt-row-box">
+                    <label class="title" id="reptTit">举报内容：</label>
+                    <p class="rpt-title text-truncate">Github使用之git回退到某个历史版本</p>
+                </div>
+                <div class="txt-row-box">
+                    <label class="title">举报原因：</label>
+                    <div class="rdo-box">
+                        <label><input type="radio" class="rdo-chk report-type" id="report_sex" name="report_type" value="1">色情</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_Politics" name="report_type" value="2">政治</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_copy" name="report_type" value="3">抄袭</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_ad" name="report_type" value="4">广告</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_want" name="report_type" value="5">招聘</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_call" name="report_type" value="6">骂人</label>
+                        <label><input type="radio" class="rdo-chk report-type" id="report_other" name="report_type" value="7">其他</label>
+                    </div>
+                </div>
+                <div class="txt-row-box" id="rptOriginalurl">
+                    <label class="title">原文地址：</label>
+                    <div class="txt-box">
+                        <input class="ipt" type="text" name="originalurl">
+                    </div>
+                </div>
+                <div class="txt-row-box">
+                    <label class="title">原因补充：</label>
+                    <div class="txt-box">
+                        <textarea class="ipt ipt-textarea" name="description" maxlength="30"></textarea>
+                        <p class="remark">最多只允许输入30个字</p>
+                    </div>
+                </div>
+            </div>
+            <div class="opt-box text-right">
+                <input type="reset" class="btn btn-link-gray btn-close" value="取消">
+                <input type="submit" class="btn btn-red btn-submit" value="提交">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="pulllog-box" style="display: block;">
+	<div class="pulllog clearfix">
+		<span class="text float-left">加入CSDN，享受更精准的内容推荐，与500万程序员共同成长！</span>
+		<div class="pulllog-btn float-right clearfix">
+            <button class="pulllog-login float-left csdn-tracking-statistics tracking-click" data-mod="popu_557">
+                登录
+            </button>
+            <div class="pulllog-sigin float-left csdn-tracking-statistics tracking-click" data-mod="popu_558">
+                <a href="https://passport.csdn.net/account/mobileregister" target="_blank">注册</a>
+            </div>
+            <button class="btn-close">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#csdnc-times"></use>
+                </svg>
+            </button>
+		</div>
+	</div>
+</div>
+<div id="loginWrap" style="display:none"></div>
+<div class="tool-box">
+	<ul class="meau-list">
+		<li>
+			<button class="btn-like" title="点赞">
+				<svg class="icon active" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup-ok"></use>
+				</svg><svg class="icon no-active" aria-hidden="true">
+					<use xlink:href="#csdnc-thumbsup"></use>
+				</svg>
+				<p>1</p>
+			</button>
+		</li>
+		<li class="toc-container-box" id="liTocBox">
+			<button class="btn-toc" title="目录">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#csdnc-contents"></use>
+				</svg><br>目录
+			</button>
+			<div class="toc-container">
+				<div class="pos-box">
+					<div class="icon-arrow"></div>
+					<div class="scroll-box">
+						<div class="toc-box"></div>
+					</div>
+				</div>
+				<div class="opt-box">
+					<button class="btn-opt prev nomore" title="向上">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevronup"></use>
+						</svg>
+					</button>
+					<button class="btn-opt next">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#csdnc-chevrondown"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</li>
+		<li>
+			<button class="btn-bookmark" title="收藏">
+				<svg class="icon active" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark-ok"></use>
+				</svg><svg class="icon no-active" aria-hidden="true">
+					<use xlink:href="#csdnc-bookmark"></use>
+				</svg><br>收藏
+			</button>
+		</li>
+		<li>
+			<a class="btn-comments" title="评论" href="#commentBox">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#csdnc-comments"></use>
+				</svg><br>评论
+			</a>
+		</li>
+				<li class="bdsharebuttonbox">
+			<a class="btn-comments bds_weixin" data-cmd="weixin" title="微信分享">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#csdnc-wechat"></use>
+				</svg><br>微信
+			</a>
+		</li>
+		<li class="bdsharebuttonbox">
+			<a class="btn-comments bds_tsina" data-cmd="tsina" title="微博分享">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#csdnc-weibo"></use>
+				</svg><br>微博
+			</a>
+		</li>
+		<li class="bdsharebuttonbox">
+			<a class="btn-comments bds_qzone" data-cmd="qzone" title="QQ分享">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#csdnc-qq"></use>
+				</svg><br>QQ
+			</a>
+		</li>
+	</ul>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'https://csdnimg.cn/static/api/js/share.js?v=89860594'];</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.2/js/sandalstrap.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
+<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201803151422'></script>
+<script>
+    GoTop({
+        right: 8,
+        hasReport: true,
+        reportFun: function() {
+            showReport(false,'Github使用之git回退到某个历史版本');
+        }
+    })
+</script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/common-bd54b21308.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/template/js/detail-308b5e4c9b.min.js"></script>
+<script src="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-22f3069ef3.min.js"></script>
+<script src="https://csdnimg.cn/search/baidu_search-1.1.2.js?v=201802071056&autorun=true&install=true&keyword=github+%E4%B9%8B%E5%89%8D%E7%89%88%E6%9C%AC"  type="text/javascript"></script>
+</body>
+<div class="box-box-default">
+    <a class="btn-remove">
+        关闭
+    </a>
+    <script type="text/javascript" src="//cee1.iteye.com/mhzzjepzz.js"></script>
+</div>
+<div class="box-box-large">
+    <a class="btn-remove">
+        关闭
+    </a>
+    <script type="text/javascript" src="//cee1.iteye.com/idvveasfs.js"></script>
+</div>
+</html>
