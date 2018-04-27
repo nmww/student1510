@@ -1,0 +1,35 @@
+    1  ls
+    2  cd /etc/profile 
+    3  ls
+    4  cd /etc/
+    5  ls
+    6  vi gitconfig 
+    7  ls
+    8  cd ~
+    9  ls
+   10  ls
+   11  ls -al
+   12  source  /etc/profile 
+   13  vi /etc/profile 
+   14  cd /etc/
+   15  ls
+   16  vi profile 
+   17  vi gitconfig 
+   18  vi profile 
+   19  ls ~
+   20  exit
+   21  ls
+   22  cd Desktop/
+   23  ls
+   24  cd git
+   25  ls
+   26  cd gittt/
+   27  ls
+   28  mkdir p1804
+   29  ls
+   30  cd p1804/
+   31  ls
+   32  ls
+   33  ls
+   34  history 
+   35  history > 1.txt
