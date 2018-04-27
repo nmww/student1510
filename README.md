@@ -29,3 +29,24 @@ test
 # …or import code from another repository
 - You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
 
+# 回复到历史版本
+
+* https://blog.csdn.net/sinat_26367835/article/details/45047411
+* https://blog.csdn.net/yxys01/article/details/78454315?locationnum=10&fps=1
+
+```
+1、 查找历史版本
+
+       使用git log命令查看所有的历史版本，获取你git的某个历史版本的id
+       $ git log --pretty=oneline
+
+       假设查到历史版本的id是fae6966548e3ae76cfa7f38a461c438cf75ba965。
+
+2、 恢复到历史版本
+
+$ git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
+1
+3、 把修改推到远程服务器
+
+$ git push -f -u origin master  
+```
